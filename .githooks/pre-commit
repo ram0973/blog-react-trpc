@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+echo "🔥 Pre-commit hook is working"
+pnpm lint-staged
+pnpm types

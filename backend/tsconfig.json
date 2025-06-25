@@ -1,0 +1,29 @@
+{
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+    "files": true,
+    "transpileOnly": true
+  },
+  "compilerOptions": {
+    "module": "ESNext", // Use ESNext module system (ES modules)
+    "target": "ESNext", // Compile to the latest ECMAScript version
+    "moduleResolution": "bundler", // Resolve modules using Node.js style
+    "esModuleInterop": true, // Enables interop between ES modules and CommonJS
+    "allowSyntheticDefaultImports": true, // Allows default imports from modules with no default export
+    "strict": true, // Enables strict type-checking
+    "skipLibCheck": true, // Skip type-checking declaration files (faster builds)
+    "outDir": "./dist",
+    "allowJs": true,
+    "downlevelIteration": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "inlineSources": true,
+    "isolatedModules": true,
+    "lib": ["es2022"],
+  },
+  "include": ["src"]
+}

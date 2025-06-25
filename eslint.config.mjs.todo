@@ -1,0 +1,127 @@
+import { includeIgnoreFile } from '@eslint/compat'
+import js from '@eslint/js'
+import prettierConfig from 'eslint-config-prettier'
+import importPlugin from 'eslint-plugin-import'
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
+import prettierPlugin from 'eslint-plugin-prettier'
+import prettierRecommended from 'eslint-plugin-prettier/recommended'
+import reactRecommended from 'eslint-plugin-react/configs/recommended.js'
+import globals from 'globals'
+import { fileURLToPath } from 'node:url'
+import tseslint from 'typescript-eslint'
+
+// Общие игнорируемые пути
+const ignorePatterns = ['dist/**', '**/dist/**', 'node_modules/**', '**/*.d.ts', 'webapp/vite.config.ts']
+
+const baseConfig = {
+  ignores: ignorePatterns,
+  plugins: {
+    import: importPlugin,
+    'jsx-a11y': jsxA11yPlugin,
+    prettier: prettierPlugin,
+  },
+  languageOptions: {
+    ecmaVersion: 2022,
+    sourceType: 'module',
+    globals: {
+      ...globals.browser,
+      ...globals.jquery,
+      ...globals.node,
+      process: 'readonly',
+      Routes: 'readonly',
+      FB: 'readonly',
+      SSR: 'readonly',
+    },
+  },
+  rules: {
+    'no-console': ['error', { allow: ['info', 'warn', 'error'] }],
+    'no-alert': 'error',
+    'prefer-const': 'error',
+    eqeqeq: ['error', 'smart'],
+    'arrow-body-style': 'error',
+    curly: ['error', 'all'],
+    'import/order': [
+      'error',
+      {
+        'newlines-between': 'always',
+        alphabetize: { order: 'asc', caseInsensitive: true },
+        groups: [['builtin', 'external'], 'internal', 'parent', ['sibling', 'index']],
+      },
+    ],
+    'jsx-a11y/anchor-is-valid': 'off',
+    'no-irregular-whitespace': ['error', { skipTemplates: true, skipStrings: true }],
+    'prettier/prettier': 'error',
+  },
+}
+
+const tsConfig = tseslint.config({
+  files: ['**/*.ts', '**/*.tsx'],
+  ignores: ignorePatterns,
+  extends: [...tseslint.configs.strictTypeChecked, ...tseslint.configs.stylisticTypeChecked],
+  rules: {
+    curly: ['error', 'all'],
+    '@typescript-eslint/consistent-type-assertions': 'error',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        ignoreRestSiblings: true,
+      },
+    ],
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/restrict-template-expressions': 'off',
+    '@typescript-eslint/prefer-nullish-coalescing': 'off',
+  },
+  languageOptions: {
+    parserOptions: {
+      project: true,
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+
+const tsxConfig = tseslint.config({
+  files: ['**/*.tsx'],
+  ignores: ignorePatterns,
+  extends: [reactRecommended],
+  rules: {
+    curly: ['error', 'all'],
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-boolean-value': 'error',
+    'react/jsx-no-useless-fragment': 'error',
+    'react/prop-types': 'off',
+    'react/no-unescaped-entities': 'off',
+    'react/jsx-uses-react': 'off', // Для React 17+
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+})
+
+const nodeConfig = {
+  files: ['*.config.js', 'backend/**/*'],
+  ignores: ignorePatterns,
+  languageOptions: {
+    globals: {
+      ...globals.node,
+    },
+  },
+}
+
+export default tseslint.config(
+  {
+    ignores: ignorePatterns,
+  },
+  includeIgnoreFile(fileURLToPath(import.meta.resolve('./.gitignore'))),
+  prettierRecommended,
+  js.configs.recommended,
+  baseConfig,
+  ...tsConfig,
+  ...tsxConfig,
+  nodeConfig,
+  prettierConfig,
+)
