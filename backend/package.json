@@ -24,7 +24,7 @@
     "@blog/webapp": "workspace:*",
     "@prisma/client": "^6.10.1",
     "@trpc/server": "^11.4.2",
-    "better-auth": "^1.2.9",
+    "better-auth": "^1.4.2",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
